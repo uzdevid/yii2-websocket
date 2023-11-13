@@ -1,10 +1,6 @@
 <?php
 
-namespace uzdevid\websocket;
-
-use uzdevid\websocket\handler\base\Message;
-use uzdevid\websocket\handler\base\Request;
-use uzdevid\websocket\handler\base\Response;
+namespace uzdevid\websocket\handler\base;
 
 abstract class Filter {
     private Request $request;
