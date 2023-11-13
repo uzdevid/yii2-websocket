@@ -18,15 +18,17 @@ class Dispatcher {
     }
 
     public function onMessage(TcpConnection $connection, $data): void {
-        $payload = json_decode($data, true);
-
         $response = new Response($connection);
+
+        $payload = json_decode($data, true);
 
         if (!isset($payload['method'], $payload['body'])) {
             $response->message(new Error('Invalid payload structure'))->send();
         }
 
-        $router = new Router($payload['method'], $payload['body'], $response);
+        $request = new Request($payload['method'], $payload['body'], $payload['headers'] ?? []);
+
+        $router = new Router($request, $response);
 
         $router->webSocket($this->webSocket);
 

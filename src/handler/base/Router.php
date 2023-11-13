@@ -9,16 +9,12 @@ use uzdevid\websocket\WebSocket;
 use yii\base\Exception;
 
 class Router {
-    public string $route;
-    public array $body;
-    public Method $method;
+    public Request $request;
     public Response $response;
-
     private WebSocket $webSocket;
 
-    public function __construct(string $route, array $body, Response $response) {
-        $this->route = $route;
-        $this->body = $body;
+    public function __construct(Request $request, Response $response) {
+        $this->request = $request;
         $this->response = $response;
     }
 
@@ -28,20 +24,17 @@ class Router {
     }
 
     public function run(): Message {
-        preg_match($this->webSocket->methodPattern, $this->route, $matches);
-
-        $className = str_replace('.', '\\', $matches[1]);
-        $className = "{$this->webSocket->methodsNamespace}\\$className";
-        $methodName = $matches[2];
+        $className = $this->request->getMethodNamespace($this->webSocket->methodsNamespace);
+        $methodName = $this->request->getMethodName();
 
         if (!class_exists($className) || !method_exists($className, $methodName)) {
-            $this->response->message(new Error('Invalid method'))->send();
+            $this->response->message(new Error('Method not found'))->send();
         }
 
-        $this->method = new $className($this->response);
+        $method = new $className($this->response);
 
         try {
-            $responseMessage = call_user_func([$this->method, $methodName], $this->body, $this->webSocket);
+            $responseMessage = call_user_func([$method, $methodName], $this->request, $this->webSocket);
             $responseMessage = new Success($responseMessage);
         } catch (UnprocessableEntityHttpException $exception) {
             $responseMessage = new Error($exception->getMessage(), $exception->errors);

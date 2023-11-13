@@ -2,6 +2,8 @@
 
 namespace uzdevid\websocket;
 
+use uzdevid\websocket\handler\base\Response;
+
 abstract class Method {
     protected Response $response;
 
