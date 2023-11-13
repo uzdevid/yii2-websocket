@@ -1,9 +1,6 @@
 <?php
 
-namespace uzdevid\websocket;
-
-use uzdevid\websocket\handler\base\Filter;
-use uzdevid\websocket\handler\base\Response;
+namespace uzdevid\websocket\handler\base;
 
 abstract class Method {
     protected Response $response;

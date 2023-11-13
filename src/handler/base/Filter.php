@@ -2,8 +2,6 @@
 
 namespace uzdevid\websocket\handler\base;
 
-use uzdevid\websocket\Method;
-
 abstract class Filter {
     protected Request $request;
     protected Response $response;
