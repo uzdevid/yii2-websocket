@@ -2,12 +2,14 @@
 
 namespace uzdevid\websocket\handler\base;
 
+use yii\web\IdentityInterface;
+
 class Request {
     protected string $method;
     protected array $headers = [];
     protected array $body = [];
 
-    public array|object|null $identity = null;
+    public IdentityInterface|null $identity = null;
 
     public function __construct(string $method, array $body, array $headers) {
         $this->method = $method;
