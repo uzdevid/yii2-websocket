@@ -4,7 +4,6 @@ namespace uzdevid\websocket;
 
 use uzdevid\websocket\client\Clients;
 use uzdevid\websocket\handler\base\Dispatcher;
-use Workerman\Connection\TcpConnection;
 use Workerman\Worker;
 use yii\base\Component;
 
@@ -17,7 +16,6 @@ class WebSocket extends Component {
     public string $clientProtocol = 'ws';
     public string $clientHost = 'localhost';
 
-    public string $methodPattern = '/(\w+(?:\.\w+)*)\.(\w+)/m';
     public string $methodsNamespace = 'console\\socket\\methods';
 
     public Clients $clients;
