@@ -22,4 +22,16 @@ class Request {
         preg_match('/(\w+(?:\.\w+)*)\.(\w+)/m', $this->method, $matches);
         return $matches[2];
     }
+
+    public function getMethod(): string {
+        return $this->method;
+    }
+
+    public function getHeaders(): array {
+        return $this->headers;
+    }
+
+    public function getBody(): array {
+        return $this->body;
+    }
 }
