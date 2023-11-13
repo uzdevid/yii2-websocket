@@ -22,6 +22,11 @@ class Clients {
         return $this;
     }
 
+    public function removeConnection(int $id): static {
+        unset($this->connections[$id]);
+        return $this;
+    }
+
     public function getConnection(int $id): TcpConnection|null {
         return $this->connections[$id] ?? null;
     }

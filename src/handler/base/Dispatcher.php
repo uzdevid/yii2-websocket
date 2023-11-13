@@ -14,7 +14,7 @@ class Dispatcher {
     }
 
     public function onConnect(TcpConnection $connection): void {
-        $this->webSocket->addConnection($connection);
+        $this->webSocket->clients()->addConnection($connection);
     }
 
     public function onMessage(TcpConnection $connection, $data): void {
@@ -34,5 +34,7 @@ class Dispatcher {
         $response->message($responseMessage)->send();
     }
 
-    public function onClose(TcpConnection $connection) { }
+    public function onClose(TcpConnection $connection): void {
+        $this->webSocket->clients()->removeConnection($connection->id);
+    }
 }
