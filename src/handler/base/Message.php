@@ -1,12 +1,12 @@
 <?php
 
-namespace uzdevid\websocket;
+namespace uzdevid\websocket\handler\base;
 
 use yii\base\Arrayable;
 use yii\base\ArrayableTrait;
 
 abstract class Message implements Arrayable {
     use ArrayableTrait;
-
-    public bool $success = true;
+    
+    public string $method;
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace uzdevid\websocket;
+namespace uzdevid\websocket\handler\base;
 
 use common\exceptions\UnprocessableEntityHttpException;
 use uzdevid\websocket\messages\Error;
 use uzdevid\websocket\messages\Success;
+use uzdevid\websocket\WebSocket;
 use yii\base\Exception;
 
 class Router {
@@ -40,7 +41,7 @@ class Router {
         $this->method = new $className($this->response);
 
         try {
-            $responseMessage = call_user_func([$this->method, $methodName], $this->body);
+            $responseMessage = call_user_func([$this->method, $methodName], $this->body, $this->webSocket);
             $responseMessage = new Success($responseMessage);
         } catch (UnprocessableEntityHttpException $exception) {
             $responseMessage = new Error($exception->getMessage(), $exception->errors);

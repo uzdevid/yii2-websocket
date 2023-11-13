@@ -1,8 +1,9 @@
 <?php
 
-namespace uzdevid\websocket;
+namespace uzdevid\websocket\handler\base;
 
 use uzdevid\websocket\messages\Error;
+use uzdevid\websocket\WebSocket;
 use Workerman\Connection\TcpConnection;
 
 class Dispatcher {
@@ -12,7 +13,9 @@ class Dispatcher {
         $this->webSocket = $webSocket;
     }
 
-    public function onConnect(TcpConnection $connection): void { }
+    public function onConnect(TcpConnection $connection): void {
+        $this->webSocket->addConnection($connection);
+    }
 
     public function onMessage(TcpConnection $connection, $data): void {
         $payload = json_decode($data, true);

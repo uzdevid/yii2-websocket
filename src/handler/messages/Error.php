@@ -2,7 +2,7 @@
 
 namespace uzdevid\websocket\messages;
 
-use uzdevid\websocket\Message;
+use uzdevid\websocket\handler\base\Message;
 
 class Error extends Message {
     public bool $success = false;

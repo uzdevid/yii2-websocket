@@ -1,6 +1,6 @@
 <?php
 
-namespace uzdevid\websocket;
+namespace uzdevid\websocket\handler\base;
 
 use Workerman\Connection\TcpConnection;
 use yii\base\Arrayable;

@@ -2,16 +2,14 @@
 
 namespace uzdevid\websocket\messages;
 
-use uzdevid\websocket\Message;
+use uzdevid\websocket\handler\base\Message;
 use yii\base\Arrayable;
 
 class Success extends Message {
     public bool $success = true;
-    public string $method;
     public Arrayable|array|null $body;
 
-    public function __construct(string $method, Arrayable|array|null $body) {
-        $this->method = $method;
+    public function __construct(Arrayable|array|null $body) {
         $this->body = $body;
     }
 }
