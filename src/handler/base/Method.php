@@ -2,6 +2,7 @@
 
 namespace uzdevid\websocket;
 
+use uzdevid\websocket\handler\base\Filter;
 use uzdevid\websocket\handler\base\Response;
 
 abstract class Method {
