@@ -2,11 +2,12 @@
 
 namespace uzdevid\websocket\handler\base;
 
-abstract class Filter {
-    private Request $request;
-    private Response $response;
+use uzdevid\websocket\Method;
 
-    private Method $method;
+abstract class Filter {
+    protected Request $request;
+    protected Response $response;
+    protected Method $method;
 
     public function request(Request $request): static {
         $this->request = $request;
