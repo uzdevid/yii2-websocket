@@ -10,4 +10,11 @@ abstract class Method {
     public function __construct(Response $response) {
         $this->response = $response;
     }
+
+    /**
+     * @return Filter[]
+     */
+    public function filters(): array {
+        return [];
+    }
 }

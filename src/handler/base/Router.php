@@ -3,8 +3,10 @@
 namespace uzdevid\websocket\handler\base;
 
 use common\exceptions\UnprocessableEntityHttpException;
+use uzdevid\websocket\Filter;
 use uzdevid\websocket\messages\Error;
 use uzdevid\websocket\messages\Success;
+use uzdevid\websocket\Method;
 use uzdevid\websocket\WebSocket;
 use yii\base\Exception;
 
@@ -31,7 +33,20 @@ class Router {
             $this->response->message(new Error('Method not found'))->send();
         }
 
+        /** @var Method $method */
         $method = new $className($this->response);
+
+        foreach ($method->filters() as $filter) {
+            $filterResult = $filter
+                ->request($this->request)
+                ->response($this->response)
+                ->method($method)
+                ->run();
+
+            if ($filterResult !== true) {
+                return $filterResult;
+            }
+        }
 
         try {
             $responseMessage = call_user_func([$method, $methodName], $this->request, $this->webSocket);
