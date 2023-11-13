@@ -2,7 +2,7 @@
 
 namespace uzdevid\websocket\handler\base;
 
-use uzdevid\websocket\messages\Error;
+use uzdevid\websocket\handler\messages\Error;
 use uzdevid\websocket\WebSocket;
 use Workerman\Connection\TcpConnection;
 

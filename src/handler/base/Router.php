@@ -4,8 +4,8 @@ namespace uzdevid\websocket\handler\base;
 
 use common\exceptions\UnprocessableEntityHttpException;
 use uzdevid\websocket\Filter;
-use uzdevid\websocket\messages\Error;
-use uzdevid\websocket\messages\Success;
+use uzdevid\websocket\handler\messages\Error;
+use uzdevid\websocket\handler\messages\Success;
 use uzdevid\websocket\Method;
 use uzdevid\websocket\WebSocket;
 use yii\base\Exception;

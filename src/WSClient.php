@@ -8,7 +8,6 @@ use yii\base\Arrayable;
 class WSClient {
     private WebSocket $webSocket;
     private WebSocketClient $client;
-    private string|int $recepientId;
 
     public function __construct(WebSocket $webSocket) {
         $this->webSocket = $webSocket;

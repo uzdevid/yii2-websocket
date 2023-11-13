@@ -1,6 +1,6 @@
 <?php
 
-namespace uzdevid\websocket\messages;
+namespace uzdevid\websocket\handler\messages;
 
 use uzdevid\websocket\handler\base\Message;
 use yii\base\Arrayable;
