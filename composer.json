@@ -1,5 +1,5 @@
 {
-  "name": "uzdevid/yii2-wesocket",
+  "name": "uzdevid/yii2-websocket",
   "description": "Yii2 Web Socket service",
   "type": "library",
   "keywords": [
