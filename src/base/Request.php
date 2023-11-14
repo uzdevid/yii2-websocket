@@ -2,10 +2,15 @@
 
 namespace uzdevid\websocket\base;
 
+use uzdevid\websocket\entities\Message;
 use yii\web\HeaderCollection;
 use yii\web\JsonParser;
 
+/**
+ * @property string $message
+ */
 class Request extends \yii\web\Request {
+    private Message $_message;
     public $parsers = [
         'application/json' => JsonParser::class,
     ];
@@ -29,6 +34,22 @@ class Request extends \yii\web\Request {
      */
     public function loadHeader(string $name, string $value): HeaderCollection {
         return $this->headers->set($name, $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessage(): string {
+        return $this->_message;
+    }
+
+    /**
+     * @param string $message
+     *
+     * @return void
+     */
+    public function setMessage(string $message): void {
+        $this->_message = $message;
     }
 
     /**

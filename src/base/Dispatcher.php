@@ -1,8 +1,9 @@
 <?php
 
-namespace uzdevid\websocket\handler\base;
+namespace uzdevid\websocket\base;
 
-use uzdevid\websocket\base\ApplicationInterface;
+use uzdevid\websocket\entities\Message;
+use uzdevid\websocket\entities\ResponseEntity;
 use uzdevid\websocket\WebSocket;
 use Workerman\Connection\TcpConnection;
 use Yii;
@@ -44,16 +45,16 @@ class Dispatcher {
 
         $payload = Json::decode($data);
 
-        $request->url = str_replace('.', '/', $payload['method'] ?? '');
-        $request->rawBody = $payload['body'] ? JSON::encode($payload['body']) : '';
+        $request->message = new Message($payload);
 
-        $request->loadHeaders($payload['headers'] ?? []);
+        $request->url = str_replace('.', '/', $request->message->method);
+        $request->rawBody = $request->message->body === null ? null : JSON::encode($request->message->body);
 
-        $result = $this->webSocket->app->runAction($request->url);
+        $request->loadHeaders($request->message->headers);
 
-        if ($result !== null) {
-            $response->data = $result;
-        }
+        $response->data = $this->webSocket->app->runAction($request->url);
+
+        $response->data = new ResponseEntity($response);
 
         $response->send();
         $response->clear();

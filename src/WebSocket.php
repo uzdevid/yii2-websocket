@@ -4,8 +4,8 @@ namespace uzdevid\websocket;
 
 use uzdevid\websocket\base\Application;
 use uzdevid\websocket\base\ApplicationInterface;
+use uzdevid\websocket\base\Dispatcher;
 use uzdevid\websocket\client\Clients;
-use uzdevid\websocket\handler\base\Dispatcher;
 use Workerman\Worker;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
