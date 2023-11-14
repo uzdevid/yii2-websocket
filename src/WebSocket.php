@@ -2,6 +2,8 @@
 
 namespace uzdevid\websocket;
 
+use uzdevid\websocket\base\Application;
+use uzdevid\websocket\base\ApplicationInterface;
 use uzdevid\websocket\client\Clients;
 use uzdevid\websocket\handler\base\Dispatcher;
 use Workerman\Worker;
@@ -16,7 +18,7 @@ class WebSocket extends Component {
     public string $clientProtocol = 'ws';
     public string $clientHost = 'localhost';
 
-    public string $methodsNamespace = 'console\\socket\\methods';
+    public ApplicationInterface|Application|array $app;
 
     public Clients $clients;
 
