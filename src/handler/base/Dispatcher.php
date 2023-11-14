@@ -2,11 +2,10 @@
 
 namespace uzdevid\websocket\handler\base;
 
+use uzdevid\websocket\base\SocketApplication;
 use uzdevid\websocket\WebSocket;
 use Workerman\Connection\TcpConnection;
-use Yii;
 use yii\base\InvalidRouteException;
-use yii\console\Exception;
 
 class Dispatcher {
     private WebSocket $webSocket;
@@ -20,7 +19,9 @@ class Dispatcher {
     }
 
     /**
-     * @throws Exception
+     * @param TcpConnection $connection
+     * @param $data
+     *
      * @throws InvalidRouteException
      */
     public function onMessage(TcpConnection $connection, $data): void {
@@ -30,7 +31,9 @@ class Dispatcher {
 
         $path = str_replace('.', '/', $payload['method']);
 
-        $result = Yii::$app->runAction($path);
+        $app = new SocketApplication();
+
+        $result = $app->runAction($path);
 
         $response->message($result)->send();
     }
