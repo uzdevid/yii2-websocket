@@ -2,7 +2,7 @@
 
 namespace uzdevid\websocket\handler\base;
 
-use uzdevid\websocket\base\SocketApplication;
+use uzdevid\websocket\base\Application;
 use uzdevid\websocket\WebSocket;
 use Workerman\Connection\TcpConnection;
 use yii\base\InvalidRouteException;
@@ -31,7 +31,7 @@ class Dispatcher {
 
         $path = str_replace('.', '/', $payload['method']);
 
-        $app = new SocketApplication();
+        $app = new Application();
 
         $result = $app->runAction($path);
 
