@@ -29,7 +29,9 @@ class Router {
      */
     public function run(): Message {
         $path = $this->request->getControllerNamespace($this->webSocket->methodsNamespace);
-        
+
+        Yii::$app->request->headers->set('Content-Type', 'application/json');
+
         return Yii::$app->runAction($path, [
             'request' => $this->request,
             'response' => $this->response

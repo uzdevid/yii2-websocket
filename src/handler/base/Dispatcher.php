@@ -2,9 +2,11 @@
 
 namespace uzdevid\websocket\handler\base;
 
-use uzdevid\websocket\handler\messages\Error;
 use uzdevid\websocket\WebSocket;
 use Workerman\Connection\TcpConnection;
+use Yii;
+use yii\base\InvalidRouteException;
+use yii\console\Exception;
 
 class Dispatcher {
     private WebSocket $webSocket;
@@ -17,23 +19,20 @@ class Dispatcher {
         $this->webSocket->clients()->addConnection($connection);
     }
 
+    /**
+     * @throws Exception
+     * @throws InvalidRouteException
+     */
     public function onMessage(TcpConnection $connection, $data): void {
         $response = new Response($connection);
 
         $payload = json_decode($data, true);
 
-        if (!isset($payload['method'], $payload['body'])) {
-            $response->message(new Error('Invalid payload structure'))->send();
-        }
+        $path = str_replace('.', '/', $payload['method']);
 
-        $request = new Request($payload['method'], $payload['body'], $payload['headers'] ?? []);
+        $result = Yii::$app->runAction($path);
 
-        $router = new Router($request, $response);
-
-        $router->webSocket($this->webSocket);
-
-        $responseMessage = $router->run();
-        $response->message($responseMessage)->send();
+        $response->message($result)->send();
     }
 
     public function onClose(TcpConnection $connection): void {
