@@ -17,14 +17,8 @@ class Request {
         $this->body = $body;
     }
 
-    public function getMethodNamespace(string $alias): string {
-        preg_match('/(\w+(?:\.\w+)*)\.(\w+)/m', $this->method, $matches);
-        return $alias . "\\" . str_replace('.', '\\', $matches[1]);
-    }
-
-    public function getMethodName(): string {
-        preg_match('/(\w+(?:\.\w+)*)\.(\w+)/m', $this->method, $matches);
-        return $matches[2];
+    public function getControllerNamespace(string|null $controllerNamespace = null): string {
+        return str_replace('.', '/', $this->method);
     }
 
     public function getMethod(): string {
