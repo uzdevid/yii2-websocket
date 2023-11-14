@@ -2,6 +2,8 @@
 
 namespace uzdevid\websocket\base;
 
-class Controller extends \yii\rest\Controller {
-
-}
+/**
+ * @property-read Response $response
+ * @property-read Request $request
+ */
+class Controller extends \yii\rest\Controller { }
