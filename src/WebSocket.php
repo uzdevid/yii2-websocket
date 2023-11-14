@@ -8,6 +8,7 @@ use uzdevid\websocket\client\Clients;
 use uzdevid\websocket\handler\base\Dispatcher;
 use Workerman\Worker;
 use yii\base\Component;
+use yii\base\InvalidConfigException;
 
 class WebSocket extends Component {
     public string $protocol = 'websocket';
@@ -27,6 +28,9 @@ class WebSocket extends Component {
         parent::__construct();
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function run(string $name = 'main', int $count = 4): void {
         $worker = new Worker("{$this->protocol}://{$this->host}:{$this->port}/{$this->url}");
 

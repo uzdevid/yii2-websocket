@@ -8,6 +8,7 @@ use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
+use yii\helpers\Json;
 
 class Dispatcher {
     private WebSocket $webSocket;
@@ -36,17 +37,27 @@ class Dispatcher {
      * @throws InvalidRouteException
      */
     public function onMessage(TcpConnection $connection, $data): void {
-        $response = new Response($connection);
+        $request = &$this->webSocket->app->request;
+        $response = &$this->webSocket->app->response;
 
-        $this->webSocket->app->response->set
+        $response->setConnection($connection);
 
-        $payload = json_decode($data, true);
+        $payload = Json::decode($data);
 
-        $path = str_replace('.', '/', $payload['method']);
+        $request->url = str_replace('.', '/', $payload['method'] ?? '');
+        $request->rawBody = $payload['body'] ? JSON::encode($payload['body']) : '';
 
-        $result = $this->webSocket->app->runAction($path);
+        $request->loadHeaders($payload['headers'] ?? []);
 
-        $response->message($result)->send();
+        $result = $this->webSocket->app->runAction($request->url);
+
+        if ($result !== null) {
+            $response->data = $result;
+        }
+
+        $response->send();
+        $response->clear();
+        $request->clear();
     }
 
     public function onClose(TcpConnection $connection): void {

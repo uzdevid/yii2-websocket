@@ -9,11 +9,19 @@ class Response extends \yii\web\Response {
 
     protected TcpConnection $connection;
 
+    /**
+     * @param TcpConnection $connection
+     *
+     * @return $this
+     */
     public function setConnection(TcpConnection $connection): static {
         $this->connection = $connection;
         return $this;
     }
 
+    /**
+     * @return void
+     */
     protected function sendContent(): void {
         $this->connection->send($this->content);
     }
