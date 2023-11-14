@@ -20,6 +20,13 @@ class Response extends \yii\web\Response {
     }
 
     /**
+     * @return TcpConnection|null
+     */
+    public function getConnection(): TcpConnection|null {
+        return $this->connection;
+    }
+
+    /**
      * @return void
      */
     public function clear(): void {
