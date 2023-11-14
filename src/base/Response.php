@@ -7,7 +7,7 @@ use Workerman\Connection\TcpConnection;
 class Response extends \yii\web\Response {
     public $format = \yii\web\Response::FORMAT_JSON;
 
-    protected TcpConnection $connection;
+    protected TcpConnection|null $connection;
 
     /**
      * @param TcpConnection $connection
@@ -22,7 +22,8 @@ class Response extends \yii\web\Response {
     /**
      * @return void
      */
-    protected function sendContent(): void {
-        $this->connection->send($this->content);
+    public function clear(): void {
+        $this->connection = null;
+        parent::clear();
     }
 }

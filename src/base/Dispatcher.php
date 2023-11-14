@@ -52,11 +52,8 @@ class Dispatcher {
 
         $request->loadHeaders($request->message->headers);
 
-        $response->data = $this->webSocket->app->runAction($request->url);
+        $this->webSocket->app->runAction($request->url);
 
-        $response->data = new ResponseEntity($response);
-
-        $response->send();
         $response->clear();
         $request->clear();
     }
