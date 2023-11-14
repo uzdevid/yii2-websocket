@@ -37,18 +37,18 @@ class Request extends \yii\web\Request {
     }
 
     /**
-     * @return string
+     * @return Message
      */
-    public function getMessage(): string {
+    public function getMessage(): Message {
         return $this->_message;
     }
 
     /**
-     * @param string $message
+     * @param Message $message
      *
      * @return void
      */
-    public function setMessage(string $message): void {
+    public function setMessage(Message $message): void {
         $this->_message = $message;
     }
 
