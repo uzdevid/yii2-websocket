@@ -4,9 +4,10 @@ namespace uzdevid\websocket\base;
 
 use Workerman\Connection\TcpConnection;
 
+/**
+ * @property TcpConnection|null $connection
+ */
 class Response extends \yii\web\Response {
-    public $format = \yii\web\Response::FORMAT_JSON;
-
     protected TcpConnection|null $connection;
 
     /**
