@@ -2,37 +2,53 @@
 
 namespace uzdevid\websocket\client;
 
-use uzdevid\websocket\handler\base\Message;
+use uzdevid\websocket\entities\Message;
 use Workerman\Connection\TcpConnection;
+use yii\base\Arrayable;
+use yii\helpers\Json;
 
+/**
+ * @property TcpConnection[] $connections
+ */
 class Client {
     public string|int $id;
-    private array $connections = [];
+    private array $_connections = [];
 
     public function __construct(string|int $id) {
         $this->id = $id;
     }
 
     public function addConnection(TcpConnection $connection): static {
-        $this->connections[$connection->id] = $connection;
+        $this->_connections[$connection->id] = $connection;
         return $this;
     }
 
     public function getConnection(int $id): TcpConnection|null {
-        return $this->connections[$id] ?? null;
+        return $this->_connections[$id] ?? null;
     }
 
+    /**
+     * @return TcpConnection[]
+     */
     public function getConnections(): array {
-        return $this->connections;
+        return $this->_connections;
     }
 
     public function removeConnection(TcpConnection $connection): static {
-        unset($this->connections[$connection->id]);
+        unset($this->_connections[$connection->id]);
         return $this;
     }
 
-    public function send(Message $payload): void {
-        $encodedPayload = json_encode($payload, JSON_UNESCAPED_UNICODE);
+    /**
+     * @param string $method
+     * @param Arrayable|array|null $payload
+     * @param array $headers
+     *
+     * @return void
+     */
+    public function send(string $method, Arrayable|array|null $payload, array $headers = []): void {
+        $encodedPayload = JSON::encode(new Message(compact($method, $payload, $headers)), JSON_UNESCAPED_UNICODE);
+
         foreach ($this->connections as $connection) {
             $connection->send($encodedPayload);
         }

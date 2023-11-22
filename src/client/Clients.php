@@ -17,6 +17,26 @@ class Clients {
         return $this->clients[$id] ?? null;
     }
 
+    public function remove(string|int $id): static {
+        if (!isset($this->clients[$id])) {
+            return $this;
+        }
+
+        /** @var Client $client */
+        $client = $this->clients[$id];
+
+        foreach ($client->getConnections() as $connection) {
+            $connection->close();
+        }
+
+        unset($this->clients[$id]);
+        return $this;
+    }
+
+    public function all(): array {
+        return $this->clients;
+    }
+
     public function addConnection(TcpConnection $connection): static {
         $this->connections[$connection->id] = $connection;
         return $this;
