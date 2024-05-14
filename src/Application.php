@@ -3,7 +3,9 @@
 namespace UzDevid\WebSocket;
 
 use Yii;
+use yii\base\Controller;
 use yii\base\InvalidConfigException;
+use yii\base\InvalidRouteException;
 use yii\console\ErrorHandler;
 
 /**
@@ -41,6 +43,37 @@ class Application extends \yii\console\Application {
      */
     public function getWebSocket(): WebSocket {
         return $this->_webSocket;
+    }
+
+    /**
+     * @param $route
+     * @param array $params
+     * @return mixed|null
+     * @throws InvalidConfigException
+     * @throws InvalidRouteException
+     */
+    public function runAction($route, $params = []): mixed {
+        $parts = $this->createController($route);
+
+        if (!is_array($parts)) {
+            $id = $this->getUniqueId();
+            throw new InvalidRouteException('Unable to resolve the request "' . ($id === '' ? $route : $id . '/' . $route) . '".');
+        }
+
+        /* @var $controller Controller */
+        [$controller, $actionID] = $parts;
+
+        $oldController = Yii::$app->controller;
+
+        Yii::$app->controller = $controller;
+
+        $result = $controller->runAction($actionID, $params);
+
+        if ($oldController !== null) {
+            Yii::$app->controller = $oldController;
+        }
+
+        return $result;
     }
 
     /**

@@ -4,19 +4,18 @@ namespace UzDevid\WebSocket;
 
 use UzDevid\WebSocket\Entity\Message;
 use Workerman\Connection\TcpConnection;
+use Yii;
 use yii\base\InvalidRouteException;
+use yii\console\Exception;
 use yii\helpers\Json;
 
 class Dispatcher {
-    private \yii\web\Application $application;
-
     /**
      * @param WebSocket $webSocket
      */
     public function __construct(
         private WebSocket $webSocket
     ) {
-        $this->application = new \yii\web\Application();
     }
 
     public function onConnect(TcpConnection $connection): void {
@@ -24,29 +23,27 @@ class Dispatcher {
     }
 
     /**
-     * @param TcpConnection $connection
-     * @param $data
-     *
+     * @param int $connectionId
+     * @param $payload
+     * @throws Exception
      * @throws InvalidRouteException
      */
-    public function onMessage(TcpConnection $connection, $data): void {
-        $request = &$this->application->request;
-        $response = &$this->application->response;
+    public function onMessage(int $connectionId, $payload): void {
+        /** @var Request $request */
+        $request = &Yii::$app->request;
 
-        $response->setConnection($connection);
-
-        $payload = Json::decode($data);
+        $payload = Json::decode($payload);
 
         $request->message = new Message($payload);
 
-        $request->url = str_replace('.', '/', $request->message->method);
-        $request->rawBody = $request->message->body === null ? null : JSON::encode($request->message->body);
-
         $request->loadHeaders($request->message->headers);
 
-        $this->application->runAction($request->url);
+        $request->url = str_replace('.', '/', $request->message->method);
 
-        $response->clear();
+        $request->rawBody = $request->message->body === null ? null : JSON::encode($request->message->body);
+
+        Yii::$app->runAction($request->url);
+
         $request->clear();
     }
 
