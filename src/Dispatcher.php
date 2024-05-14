@@ -28,12 +28,12 @@ class Dispatcher {
     }
 
     /**
-     * @param int $connectionId
+     * @param TcpConnection $connection
      * @param $payload
      * @throws Exception
      * @throws InvalidRouteException
      */
-    public function onMessage(int $connectionId, $payload): void {
+    public function onMessage(TcpConnection $connection, $payload): void {
         /** @var Request $request */
         $request = &Yii::$app->request;
 
