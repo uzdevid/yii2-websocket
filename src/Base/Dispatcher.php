@@ -1,10 +1,9 @@
 <?php
 
-namespace uzdevid\websocket\base;
+namespace uzdevid\WebSocket\Base;
 
-use uzdevid\websocket\entities\Message;
-use uzdevid\websocket\entities\ResponseEntity;
-use uzdevid\websocket\WebSocket;
+use uzdevid\WebSocket\Entity\Message;
+use uzdevid\WebSocket\WebSocket;
 use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\InvalidConfigException;

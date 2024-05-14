@@ -1,8 +1,8 @@
 <?php
 
-namespace uzdevid\websocket\base;
+namespace uzdevid\WebSocket\Base;
 
-use uzdevid\websocket\entities\Message;
+use uzdevid\WebSocket\Entity\Message;
 use yii\web\HeaderCollection;
 use yii\web\JsonParser;
 
@@ -11,7 +11,7 @@ use yii\web\JsonParser;
  */
 class Request extends \yii\web\Request {
     private Message $_message;
-    public $parsers = [
+    public array $parsers = [
         'application/json' => JsonParser::class,
     ];
 

@@ -1,5 +1,5 @@
 {
-  "name": "uzdevid/yii2-websocket",
+  "name": "uzdevid/yii2-wsa",
   "description": "Yii2 Web Socket service",
   "type": "library",
   "keywords": [
@@ -24,7 +24,7 @@
   },
   "autoload": {
     "psr-4": {
-      "uzdevid\\websocket\\": "src"
+      "uzdevid\\WebSocket\\": "src"
     }
   }
 }
