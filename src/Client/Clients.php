@@ -1,6 +1,6 @@
 <?php
 
-namespace uzdevid\WebSocket\Client;
+namespace UzDevid\WebSocket\Client;
 
 use Workerman\Connection\TcpConnection;
 

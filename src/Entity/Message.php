@@ -1,8 +1,8 @@
 <?php
 
-namespace uzdevid\WebSocket\Entity;
+namespace UzDevid\WebSocket\Entity;
 
-use uzdevid\property\loader\Entity;
+use UzDevid\property\loader\Entity;
 
 class Message extends Entity {
     public string $method = '';

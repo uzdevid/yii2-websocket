@@ -1,8 +1,8 @@
 <?php
 
-namespace uzdevid\WebSocket\Client;
+namespace UzDevid\WebSocket\Client;
 
-use uzdevid\websocket\Entity\Message;
+use UzDevid\websocket\Entity\Message;
 use Workerman\Connection\TcpConnection;
 use yii\base\Arrayable;
 use yii\helpers\Json;

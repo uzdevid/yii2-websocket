@@ -1,8 +1,8 @@
 <?php
 
-namespace uzdevid\WebSocket\Base;
+namespace UzDevid\WebSocket;
 
-use uzdevid\WebSocket\Entity\Message;
+use UzDevid\WebSocket\Entity\Message;
 use yii\web\HeaderCollection;
 use yii\web\JsonParser;
 

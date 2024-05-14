@@ -1,6 +1,6 @@
 <?php
 
-namespace uzdevid\websocket;
+namespace UzDevid\websocket;
 
 use WebSocket\Client as WebSocketClient;
 use yii\base\Arrayable;

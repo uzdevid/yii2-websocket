@@ -1,11 +1,8 @@
 <?php
 
-namespace uzdevid\WebSocket;
+namespace UzDevid\WebSocket;
 
-use uzdevid\WebSocket\Base\Application;
-use uzdevid\WebSocket\Base\ApplicationInterface;
-use uzdevid\WebSocket\Base\Dispatcher;
-use uzdevid\WebSocket\Client\Clients;
+use UzDevid\WebSocket\Client\Clients;
 use Workerman\Worker;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -19,7 +16,7 @@ class WebSocket extends Component {
     public string $clientProtocol = 'ws';
     public string $clientHost = 'localhost';
 
-    public ApplicationInterface|Application|array $app;
+    public Application|array $app;
 
     public Clients $clients;
 
@@ -49,10 +46,9 @@ class WebSocket extends Component {
         Worker::runAll();
     }
 
-    public function wsClient(): WSClient {
-        return new WSClient($this);
-    }
-
+    /**
+     * @return Clients
+     */
     public function clients(): Clients {
         return $this->clients;
     }
