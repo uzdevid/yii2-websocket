@@ -5,9 +5,10 @@ namespace UzDevid\WebSocket;
 use UzDevid\WebSocket\Client\Clients;
 use Workerman\Worker;
 use yii\base\Component;
-use yii\base\InvalidConfigException;
 
 class WebSocket extends Component {
+    public string $name = 'Main';
+    public int $count = 4;
     public string $protocol = 'websocket';
     public string $host = 'localhost';
     public int $port = 2346;
@@ -24,14 +25,15 @@ class WebSocket extends Component {
     }
 
     /**
-     * @throws InvalidConfigException
+     * @return void
      */
-    public function run(string $name = 'Main', int $count = 4): void {
+    public function run(): void {
         $address = sprintf('%s://%s:%d/%s', $this->protocol, $this->host, $this->port, $this->url);
+
         $worker = new Worker($address);
 
-        $worker->name = $name;
-        $worker->count = $count;
+        $worker->name = $this->name;
+        $worker->count = $this->count;
 
         $dispatcher = new Dispatcher($this);
 

@@ -2,28 +2,21 @@
 
 namespace UzDevid\WebSocket;
 
-use UzDevid\WebSocket\Base\ApplicationInterface;
 use UzDevid\WebSocket\Entity\Message;
 use Workerman\Connection\TcpConnection;
-use Yii;
-use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
 use yii\helpers\Json;
 
 class Dispatcher {
-    private WebSocket $webSocket;
+    private \yii\web\Application $application;
 
     /**
-     * @throws InvalidConfigException
+     * @param WebSocket $webSocket
      */
-    public function __construct(WebSocket &$webSocket) {
-        $this->webSocket = $webSocket;
-
-        if (is_array($this->webSocket->app)) {
-            /** @var ApplicationInterface $app */
-            $app = Yii::createObject($this->webSocket->app);
-            $this->webSocket->app = $app;
-        }
+    public function __construct(
+        private WebSocket $webSocket
+    ) {
+        $this->application = new \yii\web\Application();
     }
 
     public function onConnect(TcpConnection $connection): void {
@@ -37,8 +30,8 @@ class Dispatcher {
      * @throws InvalidRouteException
      */
     public function onMessage(TcpConnection $connection, $data): void {
-        $request = &$this->webSocket->app->request;
-        $response = &$this->webSocket->app->response;
+        $request = &$this->application->request;
+        $response = &$this->application->response;
 
         $response->setConnection($connection);
 
@@ -51,7 +44,7 @@ class Dispatcher {
 
         $request->loadHeaders($request->message->headers);
 
-        $this->webSocket->app->runAction($request->url);
+        $this->application->runAction($request->url);
 
         $response->clear();
         $request->clear();

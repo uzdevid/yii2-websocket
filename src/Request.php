@@ -11,7 +11,7 @@ use yii\web\JsonParser;
  */
 class Request extends \yii\web\Request {
     private Message $_message;
-    public array $parsers = [
+    public $parsers = [
         'application/json' => JsonParser::class,
     ];
 
