@@ -7,10 +7,11 @@ use yii\web\HeaderCollection;
 use yii\web\JsonParser;
 
 /**
- * @property string $message
+ * @property Message $message
  */
 class Request extends \yii\web\Request {
-    private Message $_message;
+    public Message $message;
+
     public $parsers = [
         'application/json' => JsonParser::class,
     ];
@@ -37,27 +38,11 @@ class Request extends \yii\web\Request {
     }
 
     /**
-     * @return Message
-     */
-    public function getMessage(): Message {
-        return $this->_message;
-    }
-
-    /**
-     * @param Message $message
-     *
-     * @return void
-     */
-    public function setMessage(Message $message): void {
-        $this->_message = $message;
-    }
-
-    /**
      * @return void
      */
     public function clear(): void {
-        $this->setQueryParams(null);
-        $this->setBodyParams(null);
+        $this->setQueryParams([]);
+        $this->setBodyParams([]);
         $this->setRawBody(null);
     }
 }

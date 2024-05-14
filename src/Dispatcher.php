@@ -8,6 +8,7 @@ use Yii;
 use yii\base\InvalidRouteException;
 use yii\console\Exception;
 use yii\helpers\Json;
+use Yiisoft\Hydrator\Hydrator;
 
 class Dispatcher {
     /**
@@ -18,8 +19,12 @@ class Dispatcher {
     ) {
     }
 
+    /**
+     * @param TcpConnection $connection
+     * @return void
+     */
     public function onConnect(TcpConnection $connection): void {
-        $this->webSocket->clients()->addConnection($connection);
+        Yii::$app->addConnection($connection);
     }
 
     /**
@@ -34,7 +39,7 @@ class Dispatcher {
 
         $payload = Json::decode($payload);
 
-        $request->message = new Message($payload);
+        $request->message = (new Hydrator())->create(Message::class, $payload);
 
         $request->loadHeaders($request->message->headers);
 
@@ -47,7 +52,11 @@ class Dispatcher {
         $request->clear();
     }
 
+    /**
+     * @param TcpConnection $connection
+     * @return void
+     */
     public function onClose(TcpConnection $connection): void {
-        $this->webSocket->clients()->removeConnection($connection->id);
+        Yii::$app->removeConnection($connection->id);
     }
 }
