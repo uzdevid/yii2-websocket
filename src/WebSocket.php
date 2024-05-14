@@ -16,8 +16,6 @@ class WebSocket extends Component {
     public string $clientProtocol = 'ws';
     public string $clientHost = 'localhost';
 
-    public Application|array $app;
-
     public Clients $clients;
 
     public function __construct() {

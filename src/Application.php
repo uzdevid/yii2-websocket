@@ -2,6 +2,7 @@
 
 namespace UzDevid\WebSocket;
 
+use Yii;
 use yii\base\InvalidConfigException;
 
 /**
@@ -13,12 +14,33 @@ class Application extends \yii\console\Application {
     public $name = 'My Socket Application';
     public $defaultRoute = 'socket';
 
-    public WebSocket $webSocket;
+    private WebSocket $_webSocket;
 
     /**
      * @throws InvalidConfigException
      */
     public function run(): void {
-        $this->webSocket->run();
+        $this->_webSocket->run();
+    }
+
+    /**
+     * @param array $config
+     * @throws InvalidConfigException
+     */
+    public function setWebSocket(array $config): void {
+        $object = Yii::createObject($config);
+
+        if (!($object instanceof WebSocket)) {
+            throw new InvalidConfigException("webSocket must be " . WebSocket::class);
+        }
+
+        $this->_webSocket = $object;
+    }
+
+    /**
+     * @return WebSocket
+     */
+    public function getWebSocket(): WebSocket {
+        return $this->_webSocket;
     }
 }
