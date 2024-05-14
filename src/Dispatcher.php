@@ -11,13 +11,7 @@ use yii\helpers\Json;
 use Yiisoft\Hydrator\Hydrator;
 
 class Dispatcher {
-    /**
-     * @param WebSocket $webSocket
-     */
-    public function __construct(
-        private WebSocket $webSocket
-    ) {
-    }
+    private array $connectionHeaders = [];
 
     /**
      * @param TcpConnection $connection
@@ -25,7 +19,12 @@ class Dispatcher {
      */
     public function onConnect(TcpConnection $connection): void {
         Yii::$app->addConnection($connection);
+
+        $connection->onWebSocketConnect = function ($connection, $header) {
+            $this->connectionHeaders[$connection->id] = http_parse_headers($header);
+        };
     }
+
 
     /**
      * @param TcpConnection $connection
@@ -37,13 +36,13 @@ class Dispatcher {
         /** @var Request $request */
         $request = &Yii::$app->request;
 
-        $payload = Json::decode($payload);
+        $messageConfig = Json::decode($payload);
 
-        $request->message = (new Hydrator())->create(Message::class, $payload);
+        $messageConfig['headers'] = $this->connectionHeaders[$connection->id];
 
-        $request->loadHeaders($request->message->headers);
+        $request->message = (new Hydrator())->create(Message::class, $messageConfig);
 
-        $request->url = str_replace('.', '/', $request->message->method);
+        $request->url = str_replace(':', '/', $request->message->method);
 
         $request->rawBody = $request->message->body === null ? null : JSON::encode($request->message->body);
 

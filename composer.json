@@ -20,7 +20,8 @@
     "yiisoft/yii2": "^2.0",
     "workerman/workerman": "^4.1",
     "textalk/websocket": "^1.6.3",
-    "yiisoft/hydrator": "^1.1.0"
+    "yiisoft/hydrator": "^1.1.0",
+    "ext-http": "*"
   },
   "autoload": {
     "psr-4": {

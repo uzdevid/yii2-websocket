@@ -2,7 +2,7 @@
 
 namespace UzDevid\WebSocket;
 
-use UzDevid\WebSocket\Client\Clients;
+use UzDevid\WebSocket\Collection\Clients;
 use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\Controller;
