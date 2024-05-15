@@ -45,6 +45,7 @@ class Dispatcher {
 
         Yii::$app->runAction(str_replace(':', '/', $payloadMessage['method']), [
             'client' => $client,
+            'user' => $client->user,
             'payload' => $payloadMessage['payload']
         ]);
     }
