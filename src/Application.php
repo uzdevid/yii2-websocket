@@ -2,7 +2,6 @@
 
 namespace UzDevid\WebSocket;
 
-use UzDevid\WebSocket\Client\WebSocketClient;
 use UzDevid\WebSocket\Server\Collection\Clients;
 use UzDevid\WebSocket\Server\WebSocketServer;
 use Yii;
@@ -18,7 +17,6 @@ use yii\console\ErrorHandler;
 class Application extends \yii\console\Application {
     public $name = 'My WebSocket Application';
     private WebSocketServer $webSocketServer;
-    private WebSocketClient $webSocketClient;
 
     private Clients $_clients;
 
@@ -51,20 +49,6 @@ class Application extends \yii\console\Application {
         }
 
         $this->webSocketServer = $object;
-    }
-
-    /**
-     * @param array $config
-     * @throws InvalidConfigException
-     */
-    public function setWebSocketClient(array $config): void {
-        $object = Yii::createObject($config);
-
-        if (!($object instanceof WebSocketClient)) {
-            throw new InvalidConfigException("webSocketClient must be " . WebSocketClient::class);
-        }
-
-        $this->webSocketClient = $object;
     }
 
     /**
