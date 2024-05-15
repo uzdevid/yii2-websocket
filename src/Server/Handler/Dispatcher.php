@@ -3,6 +3,7 @@
 namespace UzDevid\WebSocket\Server\Handler;
 
 use UzDevid\WebSocket\Server\Dto\Client;
+use UzDevid\WebSocket\Server\Dto\User;
 use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -17,8 +18,11 @@ class Dispatcher {
      * @return void
      */
     public function onConnect(TcpConnection $tcpConnection): void {
-        $tcpConnection->onWebSocketConnect = static function ($tcpConnection) {
+        $tcpConnection->onWebSocketConnect = static function (TcpConnection $tcpConnection) {
+            $userId = Yii::$app->security->generateRandomString(8);
+
             Yii::$app->clients->add(new Client($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers));
+            Yii::$app->users->add(new User($userId, [$tcpConnection->id]));
         };
     }
 

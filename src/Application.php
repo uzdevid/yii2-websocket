@@ -3,6 +3,7 @@
 namespace UzDevid\WebSocket;
 
 use UzDevid\WebSocket\Server\Collection\Clients;
+use UzDevid\WebSocket\Server\Collection\Users;
 use UzDevid\WebSocket\Server\WebSocketServer;
 use Yii;
 use yii\base\Controller;
@@ -12,6 +13,7 @@ use yii\console\ErrorHandler;
 
 /**
  * @property-write array $webSocketServer
+ * @property-read Users $users
  * @property-read Clients $clients
  */
 class Application extends \yii\console\Application {
@@ -19,6 +21,7 @@ class Application extends \yii\console\Application {
     private WebSocketServer $webSocketServer;
 
     private Clients $_clients;
+    private Users $_users;
 
     /**
      * @param array $config
@@ -56,6 +59,13 @@ class Application extends \yii\console\Application {
      */
     public function getClients(): Clients {
         return $this->_clients;
+    }
+
+    /**
+     * @return Users
+     */
+    public function getUsers(): Users {
+        return $this->_users;
     }
 
     /**
