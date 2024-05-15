@@ -39,7 +39,7 @@ class Client {
      * @return array
      */
     public function send(string $method, Arrayable|array $payload): array {
-        $encodedPayload = JSON::encode(compact($method, $payload), JSON_UNESCAPED_UNICODE);
+        $encodedPayload = JSON::encode(compact('method', 'payload'), JSON_UNESCAPED_UNICODE);
 
         $successes = $fails = 0;
 
