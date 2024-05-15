@@ -46,7 +46,7 @@ class Dispatcher {
 
         $request->url = str_replace(':', '/', $request->message->method);
 
-        $request->rawBody = $request->message->body === null ? null : JSON::encode($request->message->body);
+        $request->setBodyParams($request->message->body);
 
         Yii::$app->runAction($request->url);
 
