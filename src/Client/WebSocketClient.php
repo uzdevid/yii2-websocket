@@ -7,6 +7,9 @@ use yii\base\Arrayable;
 use yii\base\Component;
 use yii\helpers\Json;
 
+/**
+ * @property-read Client $client
+ */
 class WebSocketClient extends Component {
     public string $protocol = 'ws';
     public string $host = 'localhost';
