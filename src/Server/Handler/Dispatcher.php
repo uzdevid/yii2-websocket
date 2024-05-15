@@ -21,7 +21,7 @@ class Dispatcher {
         $tcpConnection->onWebSocketConnect = static function (TcpConnection $tcpConnection) {
             $userId = Yii::$app->security->generateRandomString(8);
 
-            Yii::$app->clients->add(new Client($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers));
+            Yii::$app->clients->add(new Client($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers, $userId));
             Yii::$app->users->add(new User($userId, [$tcpConnection->id]));
         };
     }
