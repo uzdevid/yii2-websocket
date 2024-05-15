@@ -114,6 +114,7 @@ class Application extends \yii\console\Application {
     public function coreComponents(): array {
         return [
             'request' => ['class' => Request::class],
+            'response' => ['class' => Response::class],
             'errorHandler' => ['class' => ErrorHandler::class],
         ];
     }

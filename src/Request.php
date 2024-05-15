@@ -17,25 +17,16 @@ class Request extends \yii\web\Request {
     ];
 
     /**
-     * @param array $headers
+     * @param HeaderCollection $headers
      *
      * @return void
      */
-    public function loadHeaders(array $headers): void {
-        foreach ($headers as $key => $value) {
-            $this->loadHeader($key, $value);
+    public function loadHeaders(HeaderCollection $headers): void {
+        foreach ($headers as $name => $value) {
+            $this->headers->set($name, $value);
         }
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     *
-     * @return HeaderCollection
-     */
-    public function loadHeader(string $name, string $value): HeaderCollection {
-        return $this->headers->set($name, $value);
-    }
 
     /**
      * @return void
