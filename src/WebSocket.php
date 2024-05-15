@@ -27,7 +27,7 @@ class WebSocket extends Component {
         $worker->name = $this->name;
         $worker->count = $this->count;
 
-        $dispatcher = new Dispatcher($this);
+        $dispatcher = new Dispatcher();
 
         $worker->onConnect = [$dispatcher, 'onConnect'];
 

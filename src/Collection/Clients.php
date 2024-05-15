@@ -2,80 +2,61 @@
 
 namespace UzDevid\WebSocket\Collection;
 
-use Workerman\Connection\TcpConnection;
+use Countable;
+use Iterator;
+use UzDevid\WebSocket\Dto\Client;
+use UzDevid\WebSocket\Trait\CountableTrait;
+use UzDevid\WebSocket\Trait\IteratorTrait;
+use Yii;
+use yii\web\NotFoundHttpException;
 
-class Clients {
-    private array $clients = [];
-    private array $connections = [];
+/**
+ * @method Client current()
+ */
+class Clients implements Countable, Iterator {
+    use CountableTrait;
+    use IteratorTrait;
+
+    private array $container;
 
     /**
      * @param Client $client
-     * @return $this
+     * @return void
      */
-    public function add(Client $client): static {
-        $this->clients[$client->id] = $client;
-        $this->connections = array_merge($this->connections, $client->getConnections());
-
-        return $this;
+    public function add(Client $client): void {
+        $this->container[$client->id] = $client;
     }
 
     /**
      * @param string|int $id
-     * @return Client|null
+     * @return Client
+     * @throws NotFoundHttpException
      */
-    public function get(string|int $id): Client|null {
-        return $this->clients[$id] ?? null;
-    }
-
-    /**
-     * @param string|int $id
-     * @return $this
-     */
-    public function remove(string|int $id): static {
-        if (!isset($this->clients[$id])) {
-            return $this;
+    public function get(string|int $id): Client {
+        if (!isset($this->container[$id])) {
+            throw new NotFoundHttpException('Client not found');
         }
 
-        /** @var Client $client */
-        $client = $this->clients[$id];
+        return $this->container[$id];
+    }
 
-        foreach ($client->getConnections() as $connection) {
+    /**
+     * @param string|int $id
+     * @return bool
+     */
+    public function remove(string|int $id): bool {
+        try {
+            $client = $this->get($id);
+        } catch (NotFoundHttpException $e) {
+            return false;
+        }
+
+        foreach (Yii::$app->connections->getMultiple($client->connectionIds) as $connection) {
             $connection->close();
-            $this->removeConnection($connection->id);
         }
 
-        unset($this->clients[$id]);
-        return $this;
-    }
+        $client->close();
 
-    /**
-     * @return array
-     */
-    public function all(): array {
-        return $this->clients;
-    }
-
-    /**
-     * @param int $id
-     * @return $this
-     */
-    public function removeConnection(int $id): static {
-        unset($this->connections[$id]);
-        return $this;
-    }
-
-    /**
-     * @param int $id
-     * @return TcpConnection|null
-     */
-    public function getConnection(int $id): TcpConnection|null {
-        return $this->connections[$id] ?? null;
-    }
-
-    /**
-     * @return array
-     */
-    public function getConnections(): array {
-        return $this->connections;
+        return true;
     }
 }

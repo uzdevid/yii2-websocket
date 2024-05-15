@@ -2,9 +2,12 @@
 
 namespace UzDevid\WebSocket;
 
+use UzDevid\WebSocket\Dto\Connection;
 use UzDevid\WebSocket\Entity\Message;
+use UzDevid\WebSocket\Helper\HeaderParser;
 use Workerman\Connection\TcpConnection;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
 use yii\console\Exception;
 use yii\helpers\Json;
@@ -14,23 +17,21 @@ class Dispatcher {
     private array $connectionHeaders = [];
 
     /**
-     * @param TcpConnection $connection
+     * @param TcpConnection $tcpConnection
      * @return void
      */
-    public function onConnect(TcpConnection $connection): void {
-        Yii::$app->addConnection($connection);
-
-        $connection->onWebSocketConnect = function ($connection, $header) {
-            $this->connectionHeaders[$connection->id] = http_parse_headers($header);
+    public function onConnect(TcpConnection $tcpConnection): void {
+        $tcpConnection->onWebSocketConnect = static function ($tcpConnection, $header) {
+            Yii::$app->addConnection(new Connection($tcpConnection, $_GET, HeaderParser::parse($header)));
         };
     }
-
 
     /**
      * @param TcpConnection $connection
      * @param $payload
      * @throws Exception
      * @throws InvalidRouteException
+     * @throws InvalidConfigException
      */
     public function onMessage(TcpConnection $connection, $payload): void {
         /** @var Request $request */

@@ -3,18 +3,17 @@
 namespace UzDevid\WebSocket;
 
 use UzDevid\WebSocket\Collection\Clients;
-use Workerman\Connection\TcpConnection;
+use UzDevid\WebSocket\Collection\Connections;
 use Yii;
 use yii\base\Controller;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
 use yii\console\ErrorHandler;
-use yii\web\NotFoundHttpException;
 
 /**
  * @property-read Request $request
  * @property-read Clients $clients
- * @property-read TcpConnection[] $connections
+ * @property-read Connections $connections
  * @property WebSocket $webSocket
  */
 class Application extends \yii\console\Application {
@@ -23,7 +22,7 @@ class Application extends \yii\console\Application {
     private WebSocket $_webSocket;
 
     private Clients $_clients;
-    private array $_connections;
+    private Connections $_connections;
 
     /**
      * @param array $config
@@ -31,6 +30,8 @@ class Application extends \yii\console\Application {
      */
     public function __construct(array $config = []) {
         $this->_clients = new Clients();
+        $this->_connections = new Connections();
+
         parent::__construct($config);
     }
 
@@ -60,6 +61,20 @@ class Application extends \yii\console\Application {
      */
     public function getWebSocket(): WebSocket {
         return $this->_webSocket;
+    }
+
+    /**
+     * @return Clients
+     */
+    public function getClients(): Clients {
+        return $this->_clients;
+    }
+
+    /**
+     * @return Connections
+     */
+    public function getConnections(): Connections {
+        return $this->_connections;
     }
 
     /**
@@ -101,48 +116,5 @@ class Application extends \yii\console\Application {
             'request' => ['class' => Request::class],
             'errorHandler' => ['class' => ErrorHandler::class],
         ];
-    }
-
-    /**
-     * @return Clients
-     */
-    public function getClients(): Clients {
-        return $this->_clients;
-    }
-
-    /**
-     * @param TcpConnection $connection
-     * @return void
-     */
-    public function addConnection(TcpConnection $connection): void {
-        $this->_connections[$connection->id] = $connection;
-    }
-
-    /**
-     * @param int $connectionId
-     * @return void
-     */
-    public function removeConnection(int $connectionId): void {
-        unset($this->_connections[$connectionId]);
-    }
-
-    /**
-     * @return TcpConnection[]
-     */
-    public function getConnections(): array {
-        return $this->_connections;
-    }
-
-    /**
-     * @param int $connectionId
-     * @return mixed
-     * @throws NotFoundHttpException
-     */
-    public function getConnection(int $connectionId): TcpConnection {
-        if (!isset($this->_connections[$connectionId])) {
-            throw new NotFoundHttpException('Connection not found');
-        }
-
-        return $this->_connections[$connectionId];
     }
 }
