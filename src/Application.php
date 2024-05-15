@@ -112,10 +112,10 @@ class Application extends \yii\console\Application {
      * @return class-string[][]
      */
     public function coreComponents(): array {
-        return [
+        return array_merge(parent::coreComponents(), [
             'request' => ['class' => Request::class],
             'response' => ['class' => Response::class],
             'errorHandler' => ['class' => ErrorHandler::class],
-        ];
+        ]);
     }
 }
