@@ -37,10 +37,10 @@ class Dispatcher {
             return;
         }
 
-        $connection = Yii::$app->clients->get($tcpConnection->id);
+        $client = Yii::$app->clients->get($tcpConnection->id);
 
         Yii::$app->runAction(str_replace(':', '/', $payloadMessage['method']), [
-            'connection' => $connection,
+            'client' => $client,
             'payload' => $payloadMessage['payload']
         ]);
     }
