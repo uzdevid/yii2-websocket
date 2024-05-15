@@ -22,7 +22,9 @@ class Client {
      * @return Generator<Connection>
      */
     public function getConnections(): Generator {
-        yield Yii::$app->connections->getMultiple($this->connectionIds);
+        foreach (Yii::$app->connections->getMultiple($this->connectionIds) as $connection) {
+            yield $connection;
+        }
     }
 
     /**
