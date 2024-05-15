@@ -22,7 +22,7 @@ class Dispatcher {
      */
     public function onConnect(TcpConnection $tcpConnection): void {
         $tcpConnection->onWebSocketConnect = static function ($tcpConnection, $header) {
-            Yii::$app->addConnection(new Connection($tcpConnection, $_GET, HeaderParser::parse($header)));
+            Yii::$app->connections->add(new Connection($tcpConnection, $_GET, HeaderParser::parse($header)));
         };
     }
 
@@ -57,6 +57,6 @@ class Dispatcher {
      * @return void
      */
     public function onClose(TcpConnection $connection): void {
-        Yii::$app->removeConnection($connection->id);
+        Yii::$app->connections->remove($connection->id);
     }
 }
