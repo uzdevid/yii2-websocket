@@ -21,8 +21,10 @@ class Dispatcher {
      */
     public function onConnect(TcpConnection $tcpConnection): void {
         $tcpConnection->onWebSocketConnect = static function ($tcpConnection) {
-            Yii::$app->clients->add(new Client(Yii::$app->security->generateRandomString(8)));
-            Yii::$app->connections->add(new Connection($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers));
+            $clientId = Yii::$app->security->generateRandomString(8);
+
+            Yii::$app->clients->add(new Client($clientId, [$tcpConnection->id]));
+            Yii::$app->connections->add(new Connection($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers, $clientId));
         };
     }
 
@@ -50,7 +52,7 @@ class Dispatcher {
 
         $request->setBodyParams($request->message->body);
 
-        Yii::$app->runAction($request->url, ['tcpConnection' => $tcpConnection]);
+        Yii::$app->runAction($request->url, ['client' => $connection->getClient()]);
 
         $request->clear();
     }

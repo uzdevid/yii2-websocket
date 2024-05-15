@@ -3,7 +3,9 @@
 namespace UzDevid\WebSocket\Dto;
 
 use Workerman\Connection\TcpConnection;
+use Yii;
 use yii\web\HeaderCollection;
+use yii\web\NotFoundHttpException;
 
 final class Connection {
     public int $id;
@@ -21,5 +23,12 @@ final class Connection {
         public int|string|null $client_id = null
     ) {
         $this->id = $this->tcp->id;
+    }
+
+    /**
+     * @throws NotFoundHttpException
+     */
+    public function getClient(): Client {
+        return Yii::$app->clients->get($this->client_id);
     }
 }

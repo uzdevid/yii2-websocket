@@ -8,13 +8,13 @@ use yii\base\Arrayable;
 use yii\helpers\Json;
 
 class Client {
-    private array $connectionIds;
-
     /**
      * @param string|int $id
+     * @param array $connectionIds
      */
     public function __construct(
-        public string|int $id
+        public string|int $id,
+        private array     $connectionIds,
     ) {
     }
 
