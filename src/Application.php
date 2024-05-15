@@ -29,6 +29,7 @@ class Application extends \yii\console\Application {
      */
     public function __construct(array $config = []) {
         $this->_clients = new Clients();
+        $this->_users = new Users();
 
         parent::__construct($config);
     }
