@@ -51,7 +51,7 @@ class Clients implements Countable, Iterator {
             return false;
         }
 
-        foreach (Yii::$app->connections->getMultiple($client->connectionIds) as $connection) {
+        foreach ($client->getConnections() as $connection) {
             $connection->close();
         }
 

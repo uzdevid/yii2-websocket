@@ -2,6 +2,7 @@
 
 namespace UzDevid\WebSocket;
 
+use UzDevid\WebSocket\Dto\Client;
 use UzDevid\WebSocket\Dto\Connection;
 use UzDevid\WebSocket\Entity\Message;
 use Workerman\Connection\TcpConnection;
@@ -20,6 +21,7 @@ class Dispatcher {
      */
     public function onConnect(TcpConnection $tcpConnection): void {
         $tcpConnection->onWebSocketConnect = static function ($tcpConnection) {
+            Yii::$app->clients->add(new Client(Yii::$app->security->generateRandomString(8)));
             Yii::$app->connections->add(new Connection($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers));
         };
     }
