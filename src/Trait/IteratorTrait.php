@@ -4,13 +4,6 @@ namespace UzDevid\WebSocket\Trait;
 
 trait IteratorTrait {
     /**
-     * @return mixed
-     */
-    public function current(): mixed {
-        return current($this->container);
-    }
-
-    /**
      * @return void
      */
     public function next(): void {
@@ -18,9 +11,9 @@ trait IteratorTrait {
     }
 
     /**
-     * @return int
+     * @return int|string
      */
-    public function key(): int {
+    public function key(): int|string {
         return key($this->container);
     }
 
