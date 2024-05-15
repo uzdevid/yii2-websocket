@@ -9,9 +9,6 @@ use UzDevid\WebSocket\Trait\CountableTrait;
 use UzDevid\WebSocket\Trait\IteratorTrait;
 use yii\web\NotFoundHttpException;
 
-/**
- * @method Client current()
- */
 class Clients implements Countable, Iterator {
     use CountableTrait;
     use IteratorTrait;

@@ -17,8 +17,7 @@ use yii\console\ErrorHandler;
  * @property WebSocket $webSocket
  */
 class Application extends \yii\console\Application {
-    public $controllerNamespace = 'socket\\controllers';
-    public $name = 'My Socket Application';
+    public $name = 'My WebSocket Application';
     private WebSocket $_webSocket;
 
     private Clients $_clients;

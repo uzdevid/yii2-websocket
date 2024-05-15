@@ -4,7 +4,6 @@ namespace UzDevid\WebSocket;
 
 use UzDevid\WebSocket\Dto\Client;
 use UzDevid\WebSocket\Dto\Connection;
-use UzDevid\WebSocket\Entity\Message;
 use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -12,7 +11,6 @@ use yii\base\InvalidRouteException;
 use yii\console\Exception;
 use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
-use Yiisoft\Hydrator\Hydrator;
 
 class Dispatcher {
     /**
@@ -37,15 +35,19 @@ class Dispatcher {
      * @throws NotFoundHttpException
      */
     public function onMessage(TcpConnection $tcpConnection, $payload): void {
+        $payloadMessage = Json::decode($payload);
+
+        if (!isset($payloadMessage['method'], $payloadMessage['payload'])) {
+            return;
+        }
+
         $connection = Yii::$app->connections->get($tcpConnection->id);
 
-        $messageConfig = Json::decode($payload);
-
-        $message = (new Hydrator())->create(Message::class, $messageConfig);
-
-        $url = str_replace(':', '/', $message->method);
-
-        Yii::$app->runAction($url, ['client' => $connection->getClient(), 'connection' => $connection, 'payload' => $message->payload]);
+        Yii::$app->runAction(str_replace(':', '/', $payloadMessage['method']), [
+            'client' => $connection->getClient(),
+            'connection' => $connection,
+            'payload' => $payloadMessage['payload']
+        ]);
     }
 
     /**

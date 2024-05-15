@@ -1,6 +1,6 @@
 <?php
 
-namespace UzDevid\WebSocket\Entity;
+namespace UzDevid\WebSocket\Dto;
 
 final class Message {
     public string $method = '';

@@ -2,7 +2,7 @@
 
 namespace UzDevid\WebSocket;
 
-use UzDevid\WebSocket\Entity\Message;
+use UzDevid\WebSocket\Dto\Message;
 use yii\web\HeaderCollection;
 use yii\web\JsonParser;
 
