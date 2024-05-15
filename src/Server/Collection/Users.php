@@ -47,7 +47,7 @@ class Users implements Countable, Iterator {
             return false;
         }
 
-        foreach ($client->getConnections() as $connection) {
+        foreach ($client->getClients() as $connection) {
             $connection->close();
         }
 

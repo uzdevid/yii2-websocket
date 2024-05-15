@@ -47,14 +47,28 @@ class Application extends \yii\console\Application {
         $object = Yii::createObject($config);
 
         if (!($object instanceof WebSocketServer)) {
-            throw new InvalidConfigException("webSocket must be " . WebSocketServer::class);
+            throw new InvalidConfigException("webSocketServer must be " . WebSocketServer::class);
         }
 
         $this->webSocketServer = $object;
     }
 
     /**
-     * @return \UzDevid\WebSocket\Server\Collection\Clients
+     * @param array $config
+     * @throws InvalidConfigException
+     */
+    public function setWebSocketClient(array $config): void {
+        $object = Yii::createObject($config);
+
+        if (!($object instanceof WebSocketClient)) {
+            throw new InvalidConfigException("webSocketClient must be " . WebSocketClient::class);
+        }
+
+        $this->webSocketClient = $object;
+    }
+
+    /**
+     * @return Clients
      */
     public function getClients(): Clients {
         return $this->_clients;

@@ -14,9 +14,6 @@ class WebSocketServer extends Component {
     public int $port = 2346;
     public string $url = '';
 
-    public string $clientProtocol = 'ws';
-    public string $clientHost = 'localhost';
-
     /**
      * @return void
      */
