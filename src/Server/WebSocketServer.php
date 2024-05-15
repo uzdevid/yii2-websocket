@@ -1,11 +1,12 @@
 <?php
 
-namespace UzDevid\WebSocket;
+namespace UzDevid\WebSocket\Server;
 
+use UzDevid\WebSocket\Handler\Dispatcher;
 use Workerman\Worker;
 use yii\base\Component;
 
-class WebSocket extends Component {
+class WebSocketServer extends Component {
     public string $name = 'Main';
     public int $count = 4;
     public string $protocol = 'websocket';

@@ -2,63 +2,22 @@
 
 namespace UzDevid\WebSocket\Dto;
 
-use Generator;
-use Yii;
-use yii\base\Arrayable;
-use yii\helpers\Json;
+use Workerman\Connection\TcpConnection;
+use yii\web\HeaderCollection;
 
-class Client {
+final class Client {
+    public int $id;
+
     /**
-     * @param string|int $id
-     * @param array $connectionIds
+     * @param TcpConnection $tcp
+     * @param array $queryParams
+     * @param HeaderCollection $headers
      */
     public function __construct(
-        public string|int $id,
-        private array     $connectionIds,
+        public TcpConnection    $tcp,
+        public array            $queryParams,
+        public HeaderCollection $headers
     ) {
-    }
-
-    /**
-     * @return Generator<Connection>
-     */
-    public function getConnections(): Generator {
-        foreach (Yii::$app->connections->getMultiple($this->connectionIds) as $connection) {
-            yield $connection;
-        }
-    }
-
-    /**
-     * @param int $id
-     * @return void
-     */
-    public function addConnectionId(int $id): void {
-        $this->connectionIds[] = $id;
-    }
-
-    /**
-     * @param string $method
-     * @param Arrayable|array $payload
-     * @return array
-     */
-    public function send(string $method, Arrayable|array $payload): array {
-        $encodedPayload = JSON::encode(compact('method', 'payload'), JSON_UNESCAPED_UNICODE);
-
-        $successes = $fails = 0;
-
-        foreach ($this->getConnections() as $connection) {
-            if ($connection->tcp->send($encodedPayload)) $successes++;
-            else $fails++;
-        }
-
-        return [$successes, $fails];
-    }
-
-    /**
-     * @return void
-     */
-    public function close(): void {
-        foreach ($this->getConnections() as $connection) {
-            $connection->tcp->close();
-        }
+        $this->id = $this->tcp->id;
     }
 }

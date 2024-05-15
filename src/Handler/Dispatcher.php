@@ -1,9 +1,8 @@
 <?php
 
-namespace UzDevid\WebSocket;
+namespace UzDevid\WebSocket\Handler;
 
 use UzDevid\WebSocket\Dto\Client;
-use UzDevid\WebSocket\Dto\Connection;
 use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -19,10 +18,7 @@ class Dispatcher {
      */
     public function onConnect(TcpConnection $tcpConnection): void {
         $tcpConnection->onWebSocketConnect = static function ($tcpConnection) {
-            $clientId = Yii::$app->security->generateRandomString(8);
-
-            Yii::$app->clients->add(new Client($clientId, [$tcpConnection->id]));
-            Yii::$app->connections->add(new Connection($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers, $clientId));
+            Yii::$app->clients->add(new Client($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers));
         };
     }
 
@@ -41,10 +37,9 @@ class Dispatcher {
             return;
         }
 
-        $connection = Yii::$app->connections->get($tcpConnection->id);
+        $connection = Yii::$app->clients->get($tcpConnection->id);
 
         Yii::$app->runAction(str_replace(':', '/', $payloadMessage['method']), [
-            'client' => $connection->getClient(),
             'connection' => $connection,
             'payload' => $payloadMessage['payload']
         ]);
@@ -55,6 +50,6 @@ class Dispatcher {
      * @return void
      */
     public function onClose(TcpConnection $connection): void {
-        Yii::$app->connections->remove($connection->id);
+        Yii::$app->clients->remove($connection->id);
     }
 }

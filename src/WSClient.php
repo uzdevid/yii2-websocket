@@ -2,18 +2,19 @@
 
 namespace UzDevid\websocket;
 
+use UzDevid\WebSocket\Server\WebSocketServer;
 use WebSocket\Client as WebSocketClient;
 use yii\base\Arrayable;
 use yii\helpers\Json;
 
 class WSClient {
-    private WebSocket $webSocket;
+    private WebSocketServer $webSocket;
     private WebSocketClient $client;
 
     /**
-     * @param WebSocket $webSocket
+     * @param WebSocketServer $webSocket
      */
-    public function __construct(WebSocket $webSocket) {
+    public function __construct(WebSocketServer $webSocket) {
         $this->webSocket = $webSocket;
         $this->client = new WebSocketClient("{$this->webSocket->clientProtocol}://{$this->webSocket->clientHost}:{$this->webSocket->port}/{$this->webSocket->url}");
     }

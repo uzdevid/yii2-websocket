@@ -3,7 +3,7 @@
 namespace UzDevid\WebSocket;
 
 use UzDevid\WebSocket\Collection\Clients;
-use UzDevid\WebSocket\Collection\Connections;
+use UzDevid\WebSocket\Server\WebSocketServer;
 use Yii;
 use yii\base\Controller;
 use yii\base\InvalidConfigException;
@@ -11,17 +11,14 @@ use yii\base\InvalidRouteException;
 use yii\console\ErrorHandler;
 
 /**
- * @property-read Request $request
+ * @property-write array $server
  * @property-read Clients $clients
- * @property-read Connections $connections
- * @property WebSocket $webSocket
  */
 class Application extends \yii\console\Application {
     public $name = 'My WebSocket Application';
-    private WebSocket $_webSocket;
+    private WebSocketServer $server;
 
     private Clients $_clients;
-    private Connections $_connections;
 
     /**
      * @param array $config
@@ -29,7 +26,6 @@ class Application extends \yii\console\Application {
      */
     public function __construct(array $config = []) {
         $this->_clients = new Clients();
-        $this->_connections = new Connections();
 
         parent::__construct($config);
     }
@@ -38,28 +34,21 @@ class Application extends \yii\console\Application {
      * @return void
      */
     public function run(): void {
-        $this->_webSocket->run();
+        $this->server->run();
     }
 
     /**
      * @param array $config
      * @throws InvalidConfigException
      */
-    public function setWebSocket(array $config): void {
+    public function setServer(array $config): void {
         $object = Yii::createObject($config);
 
-        if (!($object instanceof WebSocket)) {
-            throw new InvalidConfigException("webSocket must be " . WebSocket::class);
+        if (!($object instanceof WebSocketServer)) {
+            throw new InvalidConfigException("webSocket must be " . WebSocketServer::class);
         }
 
-        $this->_webSocket = $object;
-    }
-
-    /**
-     * @return WebSocket
-     */
-    public function getWebSocket(): WebSocket {
-        return $this->_webSocket;
+        $this->server = $object;
     }
 
     /**
@@ -67,13 +56,6 @@ class Application extends \yii\console\Application {
      */
     public function getClients(): Clients {
         return $this->_clients;
-    }
-
-    /**
-     * @return Connections
-     */
-    public function getConnections(): Connections {
-        return $this->_connections;
     }
 
     /**
