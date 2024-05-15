@@ -41,18 +41,11 @@ class Dispatcher {
         $request = &Yii::$app->request;
 
         $connection = Yii::$app->connections->get($tcpConnection->id);
-        $request->loadHeaders($connection->headers);
-        $request->setQueryParams($connection->queryParams);
-
+        
         $messageConfig = Json::decode($payload);
+        $message = (new Hydrator())->create(Message::class, $messageConfig);
 
-        $request->message = (new Hydrator())->create(Message::class, $messageConfig);
-
-        $request->url = str_replace(':', '/', $request->message->method);
-
-        $request->setBodyParams($request->message->payload);
-
-        Yii::$app->runAction($request->url, ['client' => $connection->getClient()]);
+        Yii::$app->runAction($request->url, ['client' => $connection->getClient(), 'connection' => $connection, 'payload' => $message->payload]);
 
         $request->clear();
     }
