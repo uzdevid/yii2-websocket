@@ -37,17 +37,15 @@ class Dispatcher {
      * @throws NotFoundHttpException
      */
     public function onMessage(TcpConnection $tcpConnection, $payload): void {
-        /** @var Request $request */
-        $request = &Yii::$app->request;
-
         $connection = Yii::$app->connections->get($tcpConnection->id);
-        
+
         $messageConfig = Json::decode($payload);
+
         $message = (new Hydrator())->create(Message::class, $messageConfig);
 
-        Yii::$app->runAction($request->url, ['client' => $connection->getClient(), 'connection' => $connection, 'payload' => $message->payload]);
+        $url = str_replace(':', '/', $message->method);
 
-        $request->clear();
+        Yii::$app->runAction($url, ['client' => $connection->getClient(), 'connection' => $connection, 'payload' => $message->payload]);
     }
 
     /**
