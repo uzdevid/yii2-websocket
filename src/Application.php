@@ -2,7 +2,8 @@
 
 namespace UzDevid\WebSocket;
 
-use UzDevid\WebSocket\Collection\Clients;
+use UzDevid\WebSocket\Client\WebSocketClient;
+use UzDevid\WebSocket\Server\Collection\Clients;
 use UzDevid\WebSocket\Server\WebSocketServer;
 use Yii;
 use yii\base\Controller;
@@ -11,12 +12,13 @@ use yii\base\InvalidRouteException;
 use yii\console\ErrorHandler;
 
 /**
- * @property-write array $server
+ * @property-write array $webSocketServer
  * @property-read Clients $clients
  */
 class Application extends \yii\console\Application {
     public $name = 'My WebSocket Application';
-    private WebSocketServer $server;
+    private WebSocketServer $webSocketServer;
+    private WebSocketClient $webSocketClient;
 
     private Clients $_clients;
 
@@ -34,25 +36,25 @@ class Application extends \yii\console\Application {
      * @return void
      */
     public function run(): void {
-        $this->server->run();
+        $this->webSocketServer->run();
     }
 
     /**
      * @param array $config
      * @throws InvalidConfigException
      */
-    public function setServer(array $config): void {
+    public function setWebSocketServer(array $config): void {
         $object = Yii::createObject($config);
 
         if (!($object instanceof WebSocketServer)) {
             throw new InvalidConfigException("webSocket must be " . WebSocketServer::class);
         }
 
-        $this->server = $object;
+        $this->webSocketServer = $object;
     }
 
     /**
-     * @return Clients
+     * @return \UzDevid\WebSocket\Server\Collection\Clients
      */
     public function getClients(): Clients {
         return $this->_clients;

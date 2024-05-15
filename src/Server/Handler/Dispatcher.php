@@ -1,8 +1,8 @@
 <?php
 
-namespace UzDevid\WebSocket\Handler;
+namespace UzDevid\WebSocket\Server\Handler;
 
-use UzDevid\WebSocket\Dto\Client;
+use UzDevid\WebSocket\Server\Dto\Client;
 use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\InvalidConfigException;

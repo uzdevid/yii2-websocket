@@ -1,10 +1,10 @@
 <?php
 
-namespace UzDevid\WebSocket\Collection;
+namespace UzDevid\WebSocket\Server\Collection;
 
 use Countable;
 use Iterator;
-use UzDevid\WebSocket\Dto\User;
+use UzDevid\WebSocket\Server\Dto\User;
 use UzDevid\WebSocket\Trait\CountableTrait;
 use UzDevid\WebSocket\Trait\IteratorTrait;
 use yii\web\NotFoundHttpException;

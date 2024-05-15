@@ -1,6 +1,6 @@
 <?php
 
-namespace UzDevid\WebSocket\Dto;
+namespace UzDevid\WebSocket\Server\Dto;
 
 use Generator;
 use Yii;
@@ -10,20 +10,20 @@ use yii\helpers\Json;
 class User {
     /**
      * @param string|int $id
-     * @param array $connectionIds
+     * @param array $clientIds
      */
     public function __construct(
         public string|int $id,
-        private array     $connectionIds,
+        private array $clientIds,
     ) {
     }
 
     /**
      * @return Generator<Client>
      */
-    public function getConnections(): Generator {
-        foreach (Yii::$app->connections->getMultiple($this->connectionIds) as $connection) {
-            yield $connection;
+    public function getClients(): Generator {
+        foreach (Yii::$app->clients->getMultiple($this->clientIds) as $client) {
+            yield $client;
         }
     }
 
@@ -31,8 +31,8 @@ class User {
      * @param int $id
      * @return void
      */
-    public function addConnectionId(int $id): void {
-        $this->connectionIds[] = $id;
+    public function addClientId(int $id): void {
+        $this->clientIds[] = $id;
     }
 
     /**
@@ -45,7 +45,7 @@ class User {
 
         $successes = $fails = 0;
 
-        foreach ($this->getConnections() as $connection) {
+        foreach ($this->getClients() as $connection) {
             if ($connection->tcp->send($encodedPayload)) $successes++;
             else $fails++;
         }
@@ -57,7 +57,7 @@ class User {
      * @return void
      */
     public function close(): void {
-        foreach ($this->getConnections() as $connection) {
+        foreach ($this->getClients() as $connection) {
             $connection->tcp->close();
         }
     }

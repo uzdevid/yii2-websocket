@@ -2,7 +2,7 @@
 
 namespace UzDevid\WebSocket\Server;
 
-use UzDevid\WebSocket\Handler\Dispatcher;
+use UzDevid\WebSocket\Server\Handler\Dispatcher;
 use Workerman\Worker;
 use yii\base\Component;
 

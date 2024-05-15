@@ -1,11 +1,11 @@
 <?php
 
-namespace UzDevid\WebSocket\Collection;
+namespace UzDevid\WebSocket\Server\Collection;
 
 use Countable;
 use Generator;
 use Iterator;
-use UzDevid\WebSocket\Dto\Client;
+use UzDevid\WebSocket\Server\Dto\Client;
 use UzDevid\WebSocket\Trait\CountableTrait;
 use UzDevid\WebSocket\Trait\IteratorTrait;
 use yii\web\NotFoundHttpException;
@@ -43,7 +43,7 @@ class Clients implements Countable, Iterator {
 
     /**
      * @param int $id
-     * @return Client
+     * @return \UzDevid\WebSocket\Server\Dto\Client
      * @throws NotFoundHttpException
      */
     public function get(int $id): Client {
@@ -71,7 +71,7 @@ class Clients implements Countable, Iterator {
     }
 
     /**
-     * @return Client
+     * @return \UzDevid\WebSocket\Server\Dto\Client
      */
     public function current(): Client {
         return current($this->container);

@@ -1,6 +1,6 @@
 <?php
 
-namespace UzDevid\WebSocket\Dto;
+namespace UzDevid\WebSocket\Server\Dto;
 
 use Workerman\Connection\TcpConnection;
 use yii\web\HeaderCollection;
