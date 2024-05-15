@@ -50,7 +50,7 @@ class Dispatcher {
 
         $request->url = str_replace(':', '/', $request->message->method);
 
-        $request->setBodyParams($request->message->body);
+        $request->setBodyParams($request->message->payload);
 
         Yii::$app->runAction($request->url, ['client' => $connection->getClient()]);
 
