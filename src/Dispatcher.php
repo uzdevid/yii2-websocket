@@ -48,7 +48,7 @@ class Dispatcher {
 
         $request->setBodyParams($request->message->body);
 
-        Yii::$app->runAction($request->url);
+        Yii::$app->runAction($request->url, ['tcpConnection' => $tcpConnection]);
 
         $request->clear();
     }
