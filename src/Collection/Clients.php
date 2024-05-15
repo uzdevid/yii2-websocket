@@ -7,7 +7,6 @@ use Iterator;
 use UzDevid\WebSocket\Dto\Client;
 use UzDevid\WebSocket\Trait\CountableTrait;
 use UzDevid\WebSocket\Trait\IteratorTrait;
-use Yii;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -58,5 +57,12 @@ class Clients implements Countable, Iterator {
         $client->close();
 
         return true;
+    }
+
+    /**
+     * @return Client
+     */
+    public function current(): Client {
+        return current($this->container);
     }
 }

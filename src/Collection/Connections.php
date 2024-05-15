@@ -10,9 +10,6 @@ use UzDevid\WebSocket\Trait\CountableTrait;
 use UzDevid\WebSocket\Trait\IteratorTrait;
 use yii\web\NotFoundHttpException;
 
-/**
- * @method Connection current()
- */
 class Connections implements Countable, Iterator {
     use CountableTrait;
     use IteratorTrait;
@@ -77,5 +74,12 @@ class Connections implements Countable, Iterator {
         }
 
         return array_intersect_key($this->container, $ids);
+    }
+
+    /**
+     * @return Connection
+     */
+    public function current(): Connection {
+        return current($this->container);
     }
 }
