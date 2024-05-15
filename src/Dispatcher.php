@@ -4,42 +4,43 @@ namespace UzDevid\WebSocket;
 
 use UzDevid\WebSocket\Dto\Connection;
 use UzDevid\WebSocket\Entity\Message;
-use UzDevid\WebSocket\Helper\HeaderParser;
 use Workerman\Connection\TcpConnection;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidRouteException;
 use yii\console\Exception;
 use yii\helpers\Json;
+use yii\web\NotFoundHttpException;
 use Yiisoft\Hydrator\Hydrator;
 
 class Dispatcher {
-    private array $connectionHeaders = [];
-
     /**
      * @param TcpConnection $tcpConnection
      * @return void
      */
     public function onConnect(TcpConnection $tcpConnection): void {
-        $tcpConnection->onWebSocketConnect = static function ($tcpConnection, $header) {
-            Yii::$app->connections->add(new Connection($tcpConnection, $_GET, HeaderParser::parse($header)));
+        $tcpConnection->onWebSocketConnect = static function ($tcpConnection) {
+            Yii::$app->connections->add(new Connection($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers));
         };
     }
 
     /**
-     * @param TcpConnection $connection
+     * @param TcpConnection $tcpConnection
      * @param $payload
      * @throws Exception
-     * @throws InvalidRouteException
      * @throws InvalidConfigException
+     * @throws InvalidRouteException
+     * @throws NotFoundHttpException
      */
-    public function onMessage(TcpConnection $connection, $payload): void {
+    public function onMessage(TcpConnection $tcpConnection, $payload): void {
         /** @var Request $request */
         $request = &Yii::$app->request;
 
-        $messageConfig = Json::decode($payload);
+        $connection = Yii::$app->connections->get($tcpConnection->id);
+        $request->loadHeaders($connection->headers);
+        $request->setQueryParams($connection->queryParams);
 
-        $messageConfig['headers'] = $this->connectionHeaders[$connection->id];
+        $messageConfig = Json::decode($payload);
 
         $request->message = (new Hydrator())->create(Message::class, $messageConfig);
 

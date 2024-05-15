@@ -3,6 +3,7 @@
 namespace UzDevid\WebSocket\Dto;
 
 use Workerman\Connection\TcpConnection;
+use yii\web\HeaderCollection;
 
 final class Connection {
     public int $id;
@@ -10,13 +11,13 @@ final class Connection {
     /**
      * @param TcpConnection $tcp
      * @param array $queryParams
-     * @param array $headers
+     * @param HeaderCollection $headers
      * @param int|string|null $client_id
      */
     public function __construct(
         public TcpConnection   $tcp,
-        public array           $queryParams = [],
-        public array           $headers = [],
+        public array            $queryParams,
+        public HeaderCollection $headers,
         public int|string|null $client_id = null
     ) {
         $this->id = $this->tcp->id;
