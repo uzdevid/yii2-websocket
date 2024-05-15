@@ -13,6 +13,8 @@ class WebSocketClient extends Component {
     public int $port = 2346;
     public string $url = '';
 
+    public array $options = [];
+
     private Client $client;
 
     /**
@@ -22,7 +24,7 @@ class WebSocketClient extends Component {
         parent::__construct($config);
 
         $address = sprintf('%s://%s:%d/%s', $this->protocol, $this->host, $this->port, $this->url);
-        $this->client = new Client($address);
+        $this->client = new Client($address, $this->options);
     }
 
     /**
