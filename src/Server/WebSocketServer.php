@@ -33,6 +33,10 @@ class WebSocketServer extends Component {
 
         $worker->onClose = [$dispatcher, 'onClose'];
 
+        $worker->onError = [$dispatcher, 'onError'];
+
+        $worker->onWorkerExit = [$dispatcher, 'onWorkerExit'];
+
         Worker::runAll();
     }
 }

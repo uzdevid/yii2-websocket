@@ -5,11 +5,12 @@ namespace UzDevid\WebSocket\Server\Handler;
 use Throwable;
 use UzDevid\WebSocket\Server\Dto\Client;
 use UzDevid\WebSocket\Server\Dto\User;
-use UzDevid\WebSocket\Server\Enum\Event;
 use UzDevid\WebSocket\Server\Event\CloseConnection;
+use UzDevid\WebSocket\Server\Event\Error;
 use UzDevid\WebSocket\Server\Event\NewConnection;
 use UzDevid\WebSocket\Server\Event\NewMessage;
 use Workerman\Connection\TcpConnection;
+use Workerman\Worker;
 use Yii;
 use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
@@ -84,5 +85,38 @@ class Dispatcher {
 
         Yii::$app->clients->remove($tcpConnection->id);
         Yii::$app->trigger(CloseConnection::class, new CloseConnection($client));
+    }
+
+    /**
+     * @param TcpConnection $tcpConnection
+     * @param int $code
+     * @param string $message
+     * @return void
+     */
+    public function onError(TcpConnection $tcpConnection, int $code, string $message): void {
+        try {
+            $client = Yii::$app->clients->get($tcpConnection->id);
+        } catch (NotFoundHttpException $e) {
+            return;
+        }
+
+        Yii::$app->trigger(Error::class, new Error($client, $code, $message));
+    }
+
+    /**
+     * @param Worker $worker
+     * @return void
+     */
+    public function onWorkerExit(Worker $worker): void {
+        foreach ($worker->connections as $tcpConnection) {
+            try {
+                $client = Yii::$app->clients->get($tcpConnection->id);
+            } catch (NotFoundHttpException $e) {
+                return;
+            }
+
+            Yii::$app->clients->remove($tcpConnection->id);
+            Yii::$app->trigger(CloseConnection::class, new CloseConnection($client));
+        }
     }
 }
