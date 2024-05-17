@@ -9,6 +9,7 @@ use UzDevid\WebSocket\Server\Event\CloseConnection;
 use UzDevid\WebSocket\Server\Event\Error;
 use UzDevid\WebSocket\Server\Event\NewConnection;
 use UzDevid\WebSocket\Server\Event\NewMessage;
+use UzDevid\WebSocket\Server\Event\NewRawMessage;
 use Workerman\Connection\TcpConnection;
 use Workerman\Worker;
 use Yii;
@@ -40,18 +41,20 @@ class Dispatcher {
      */
     public function onMessage(TcpConnection $tcpConnection, $payload): void {
         try {
+            $client = Yii::$app->clients->get($tcpConnection->id);
+        } catch (NotFoundHttpException $e) {
+            return;
+        }
+
+        try {
             $payloadMessage = Json::decode($payload);
         } catch (Throwable) {
             return;
         }
 
-        if (!isset($payloadMessage['method'], $payloadMessage['payload'])) {
-            return;
-        }
+        Yii::$app->trigger(NewRawMessage::class, new NewRawMessage($client, $payloadMessage));
 
-        try {
-            $client = Yii::$app->clients->get($tcpConnection->id);
-        } catch (NotFoundHttpException $e) {
+        if (!isset($payloadMessage['method'], $payloadMessage['payload'])) {
             return;
         }
 
