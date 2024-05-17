@@ -25,7 +25,7 @@ final class Client extends BaseObject {
         public TcpConnection    $tcp,
         public array            $queryParams,
         public HeaderCollection $headers,
-        private int|string      $userId
+        private readonly int|string $userId
     ) {
         $this->id = $this->tcp->id;
 

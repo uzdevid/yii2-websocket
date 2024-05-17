@@ -43,7 +43,7 @@ class Clients implements Countable, Iterator {
 
     /**
      * @param int $id
-     * @return \UzDevid\WebSocket\Server\Dto\Client
+     * @return Client
      * @throws NotFoundHttpException
      */
     public function get(int $id): Client {
@@ -71,7 +71,7 @@ class Clients implements Countable, Iterator {
     }
 
     /**
-     * @return \UzDevid\WebSocket\Server\Dto\Client
+     * @return Client
      */
     public function current(): Client {
         return current($this->container);
