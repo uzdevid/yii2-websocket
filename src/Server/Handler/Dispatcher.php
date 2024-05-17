@@ -60,7 +60,7 @@ class Dispatcher {
 
         $method = str_replace(':', '/', $payloadMessage['method']);
 
-        Yii::$app->trigger(NewMessage::class, new NewMessage($client, $method, $payloadMessage['payload']));
+        Yii::$app->trigger(NewMessage::class, new NewMessage($client, $payloadMessage['method'], $payloadMessage['payload']));
 
         $params = [
             'client' => $client,
