@@ -13,7 +13,7 @@ use yii\web\NotFoundHttpException;
  * @property-read User $user
  */
 final class Client extends BaseObject {
-    public int $id;
+    public string $id;
 
     /**
      * @param TcpConnection $tcp
@@ -27,7 +27,7 @@ final class Client extends BaseObject {
         public HeaderCollection $headers,
         private readonly int|string $userId
     ) {
-        $this->id = $this->tcp->id;
+        $this->id = self::getUid($this->tcp);
 
         parent::__construct();
     }
@@ -37,5 +37,13 @@ final class Client extends BaseObject {
      */
     public function getUser(): User {
         return Yii::$app->users->get($this->userId);
+    }
+
+    /**
+     * @param TcpConnection $tcpConnection
+     * @return string
+     */
+    public static function getUid(TcpConnection $tcpConnection): string {
+        return md5(sprintf("%d:%d", $tcpConnection->id, $tcpConnection->worker->id));
     }
 }

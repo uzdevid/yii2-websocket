@@ -16,11 +16,11 @@ class Users implements Countable, Iterator {
     private array $container;
 
     /**
-     * @param User $client
+     * @param User $user
      * @return void
      */
-    public function add(User $client): void {
-        $this->container[$client->id] = $client;
+    public function add(User $user): void {
+        $this->container[$user->id] = $user;
     }
 
     /**

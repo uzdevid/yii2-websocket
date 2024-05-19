@@ -10,7 +10,7 @@ use yii\helpers\Json;
 class User {
     /**
      * @param string|int $id
-     * @param array $clientIds
+     * @param string[] $clientIds
      */
     public function __construct(
         public string|int $id,
@@ -28,10 +28,10 @@ class User {
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @return void
      */
-    public function addClientId(int $id): void {
+    public function addClientId(string $id): void {
         $this->clientIds[] = $id;
     }
 

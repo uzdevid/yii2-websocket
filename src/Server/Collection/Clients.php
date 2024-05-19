@@ -25,10 +25,10 @@ class Clients implements Countable, Iterator {
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @return bool
      */
-    public function remove(int $id): bool {
+    public function remove(string $id): bool {
         try {
             $connection = $this->get($id);
         } catch (NotFoundHttpException $e) {
@@ -42,11 +42,11 @@ class Clients implements Countable, Iterator {
     }
 
     /**
-     * @param int $id
+     * @param string $id
      * @return Client
      * @throws NotFoundHttpException
      */
-    public function get(int $id): Client {
+    public function get(string $id): Client {
         if (!isset($this->container[$id])) {
             throw new NotFoundHttpException('Connection not found');
         }
@@ -66,8 +66,6 @@ class Clients implements Countable, Iterator {
                 continue;
             }
         }
-
-        return array_intersect_key($this->container, $ids);
     }
 
     /**
