@@ -81,12 +81,12 @@ class Dispatcher {
      */
     public function onClose(TcpConnection $tcpConnection): void {
         try {
-            $client = Yii::$app->clients->get($tcpConnection->id);
+            $client = Yii::$app->clients->get(Client::getUid($tcpConnection));
         } catch (NotFoundHttpException $e) {
             return;
         }
 
-        Yii::$app->clients->remove($tcpConnection->id);
+        Yii::$app->clients->remove(Client::getUid($tcpConnection));
         Yii::$app->trigger(CloseConnection::class, new CloseConnection($client));
     }
 
@@ -98,7 +98,7 @@ class Dispatcher {
      */
     public function onError(TcpConnection $tcpConnection, int $code, string $message): void {
         try {
-            $client = Yii::$app->clients->get($tcpConnection->id);
+            $client = Yii::$app->clients->get(Client::getUid($tcpConnection));
         } catch (NotFoundHttpException $e) {
             return;
         }
@@ -113,12 +113,12 @@ class Dispatcher {
     public function onWorkerExit(Worker $worker): void {
         foreach ($worker->connections as $tcpConnection) {
             try {
-                $client = Yii::$app->clients->get($tcpConnection->id);
+                $client = Yii::$app->clients->get(Client::getUid($tcpConnection));
             } catch (NotFoundHttpException $e) {
                 return;
             }
 
-            Yii::$app->clients->remove($tcpConnection->id);
+            Yii::$app->clients->remove(Client::getUid($tcpConnection));
             Yii::$app->trigger(CloseConnection::class, new CloseConnection($client));
         }
     }
