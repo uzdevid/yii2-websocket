@@ -41,7 +41,7 @@ class Dispatcher {
      */
     public function onMessage(TcpConnection $tcpConnection, $payload): void {
         try {
-            $client = Yii::$app->clients->get($tcpConnection->id);
+            $client = Yii::$app->clients->get(Client::getUid($tcpConnection));
         } catch (NotFoundHttpException $e) {
             return;
         }
