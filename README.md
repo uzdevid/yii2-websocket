@@ -73,13 +73,12 @@ use UzDevid\WebSocket\Application;
 
 require __DIR__ . '/vendor/autoload.php';
 require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
-require __DIR__ . '/common/Config/bootstrap.php';
-require __DIR__ . '/socket/Config/bootstrap.php';
+require __DIR__ . '/common/сonfig/bootstrap.php';
+require __DIR__ . '/socket/сonfig/bootstrap.php';
 
 $config = yii\helpers\ArrayHelper::merge(
-    require __DIR__ . '/common/Config/main.php',
-    require __DIR__ . '/common/Config/Local/main.php',
-    require __DIR__ . '/socket/Config/main.php',
+    require __DIR__ . '/common/сonfig/main.php',
+    require __DIR__ . '/socket/сonfig/main.php',
 );
 
 $application = new Application($config);
