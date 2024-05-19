@@ -26,7 +26,7 @@ class Dispatcher {
             $userId = Yii::$app->security->generateRandomString(8);
 
             $client = new Client($tcpConnection, Yii::$app->request->queryParams, Yii::$app->request->headers, $userId);
-            $user = new User($userId, [$tcpConnection->id]);
+            $user = new User($userId,  [Client::getUid($tcpConnection)]);
 
             Yii::$app->clients->add($client);
             Yii::$app->users->add($user);
