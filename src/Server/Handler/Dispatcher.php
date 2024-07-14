@@ -13,6 +13,9 @@ use UzDevid\WebSocket\Server\Event\NewRawMessage;
 use Workerman\Connection\TcpConnection;
 use Workerman\Worker;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\base\InvalidRouteException;
+use yii\console\Exception;
 use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 
@@ -38,6 +41,9 @@ class Dispatcher {
     /**
      * @param TcpConnection $tcpConnection
      * @param $payload
+     * @throws InvalidConfigException
+     * @throws InvalidRouteException
+     * @throws Exception
      */
     public function onMessage(TcpConnection $tcpConnection, $payload): void {
         try {
@@ -68,11 +74,7 @@ class Dispatcher {
             'payload' => $payloadMessage['payload']
         ];
 
-        try {
-            Yii::$app->runAction($method, $params);
-        } catch (Throwable $e) {
-            Yii::error($e->getMessage());
-        }
+        Yii::$app->runAction($method, $params);
     }
 
     /**
